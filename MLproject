@@ -1,0 +1,17 @@
+name: obesity-ml-project
+
+python_env: python_env.yaml
+
+entry_points:
+  main:
+    parameters:
+      input_path: {type: string, default: "data/interim/obesity_estimation_modified.csv"}
+      output_path: {type: string, default: "data/interim/dataset_limpio_refactored.csv"}
+      use_mlflow: {type: string, default: "true"}
+    command: "python scripts/run_eda.py --input {input_path} --output {output_path}"
+  
+  compare:
+    command: "python scripts/compare_datasets.py"
+  
+  test:
+    command: "pytest tests/ -v"

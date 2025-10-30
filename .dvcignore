@@ -1,0 +1,21 @@
+# Add patterns of files dvc should ignore, which could improve
+# the performance. Learn more at
+# https://dvc.org/doc/user-guide/dvcignore
+
+# Python artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+
+# MLflow artifacts
+mlruns/
+
+# Jupyter notebooks
+.ipynb_checkpoints/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store

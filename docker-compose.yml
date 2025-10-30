@@ -1,0 +1,97 @@
+version: '3.8'
+
+services:
+  # Main application service - EDA Pipeline
+  eda-pipeline:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: obesity-ml-eda
+    volumes:
+      - ./data:/app/data
+      - ./models:/app/models
+      - ./reports:/app/reports
+      - ./mlruns:/app/mlruns
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: python scripts/run_eda.py
+    networks:
+      - ml-network
+
+  # Comparison service - Validate results
+  compare:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: obesity-ml-compare
+    volumes:
+      - ./data:/app/data
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: python scripts/compare_datasets.py
+    networks:
+      - ml-network
+    depends_on:
+      - eda-pipeline
+
+  # Test service - Run unit tests
+  test:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: obesity-ml-test
+    volumes:
+      - ./data:/app/data
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: pytest tests/ -v --tb=short
+    networks:
+      - ml-network
+
+  # MLflow tracking server
+  mlflow:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: obesity-ml-mlflow
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./mlruns:/app/mlruns
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: mlflow ui --host 0.0.0.0 --port 5000 --backend-store-uri file:///app/mlruns
+    networks:
+      - ml-network
+
+  # Interactive shell - For development
+  shell:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: obesity-ml-shell
+    volumes:
+      - ./data:/app/data
+      - ./models:/app/models
+      - ./reports:/app/reports
+      - ./mlruns:/app/mlruns
+      - ./src:/app/src
+      - ./scripts:/app/scripts
+      - ./tests:/app/tests
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: bash
+    stdin_open: true
+    tty: true
+    networks:
+      - ml-network
+
+networks:
+  ml-network:
+    driver: bridge
+
+volumes:
+  data:
+  models:
+  reports:
+  mlruns:

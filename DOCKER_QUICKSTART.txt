@@ -1,0 +1,233 @@
+╔═══════════════════════════════════════════════════════════════════╗
+║                                                                   ║
+║              🐳 DOCKER - INICIO RÁPIDO EN 3 PASOS 🐳             ║
+║                                                                   ║
+╚═══════════════════════════════════════════════════════════════════╝
+
+🎯 ¿POR QUÉ DOCKER?
+
+✅ Sin conflictos de versiones de Python
+✅ Sin problemas de dependencias
+✅ Mismo resultado en todas las máquinas
+✅ Instalación automática de todo
+✅ Aislamiento completo del sistema
+
+═══════════════════════════════════════════════════════════════════
+
+📋 PREREQUISITO: INSTALAR DOCKER
+
+Windows/Mac:
+  1. Ir a https://www.docker.com/products/docker-desktop
+  2. Descargar e instalar Docker Desktop
+  3. Abrir Docker Desktop (debe estar corriendo)
+
+Linux (Ubuntu):
+  $ sudo apt-get install docker.io docker-compose
+  $ sudo usermod -aG docker $USER
+  $ newgrp docker
+
+Verificar instalación:
+  $ docker --version
+  $ docker-compose --version
+
+═══════════════════════════════════════════════════════════════════
+
+🚀 INICIO RÁPIDO - 3 COMANDOS
+
+┌───────────────────────────────────────────────────────────────────┐
+│ LINUX / MAC                                                       │
+└───────────────────────────────────────────────────────────────────┘
+
+$ cd obesity-ml-project           # 1. Entrar al directorio
+$ chmod +x docker-run.sh          # 2. Dar permisos
+$ ./docker-run.sh all             # 3. EJECUTAR TODO ✨
+
+┌───────────────────────────────────────────────────────────────────┐
+│ WINDOWS (PowerShell)                                              │
+└───────────────────────────────────────────────────────────────────┘
+
+PS> cd obesity-ml-project         # 1. Entrar al directorio
+PS> Set-ExecutionPolicy RemoteSigned -Scope CurrentUser  # 2. Habilitar
+PS> .\docker-run.ps1 all          # 3. EJECUTAR TODO ✨
+
+═══════════════════════════════════════════════════════════════════
+
+📊 QUÉ HACE "./docker-run.sh all"
+
+El comando ejecuta 3 cosas automáticamente:
+
+1️⃣  EDA Pipeline
+   → Limpia los datos
+   → Genera dataset_limpio_refactored.csv
+   → ✅ Dataset limpio generado
+
+2️⃣  Comparación
+   → Compara notebook vs refactorizado
+   → Valida que son idénticos
+   → 🎉 DATASETS ARE IDENTICAL!
+
+3️⃣  Tests
+   → Ejecuta 12 tests unitarios
+   → Valida todo el código
+   → ✅ 12/12 tests PASSED
+
+═══════════════════════════════════════════════════════════════════
+
+🎬 OUTPUT ESPERADO
+
+Verás algo como esto:
+
+🔨 Building Docker images...
+✅ Build complete!
+
+📊 Running EDA pipeline...
+✓ Data loaded successfully
+✓ Cleaning data...
+✓ EDA pipeline complete!
+
+🔍 Comparing datasets...
+🎉 DATASETS ARE IDENTICAL! 🎉
+✓ Shape match: (2153, 17)
+✓ Values match: 100%
+
+🧪 Running tests...
+✅ 12 passed in X.XXs
+
+╔═══════════════════════════════════════════════════════════════════╗
+║              🎉 COMPLETE WORKFLOW FINISHED! 🎉                   ║
+╚═══════════════════════════════════════════════════════════════════╝
+
+═══════════════════════════════════════════════════════════════════
+
+🎯 OTROS COMANDOS ÚTILES
+
+Linux/Mac:
+  ./docker-run.sh eda        # Solo pipeline EDA
+  ./docker-run.sh compare    # Solo comparación
+  ./docker-run.sh test       # Solo tests
+  ./docker-run.sh mlflow     # Abrir MLflow UI
+  ./docker-run.sh shell      # Shell interactivo
+  ./docker-run.sh help       # Ver todos los comandos
+
+Windows:
+  .\docker-run.ps1 eda       # Solo pipeline EDA
+  .\docker-run.ps1 compare   # Solo comparación
+  .\docker-run.ps1 test      # Solo tests
+  .\docker-run.ps1 mlflow    # Abrir MLflow UI
+  .\docker-run.ps1 shell     # Shell interactivo
+  .\docker-run.ps1 help      # Ver todos los comandos
+
+═══════════════════════════════════════════════════════════════════
+
+🖥️  ABRIR MLFLOW UI
+
+Linux/Mac:
+  $ ./docker-run.sh mlflow
+
+Windows:
+  PS> .\docker-run.ps1 mlflow
+
+Luego abrir navegador en: http://localhost:5000
+
+Presionar Ctrl+C para detener
+
+═══════════════════════════════════════════════════════════════════
+
+🐚 SHELL INTERACTIVO (Para explorar)
+
+Linux/Mac:
+  $ ./docker-run.sh shell
+
+Windows:
+  PS> .\docker-run.ps1 shell
+
+Dentro del shell puedes:
+  # Ver archivos
+  ls -la
+  
+  # Ejecutar Python
+  python
+  
+  # Ver dataset
+  python -c "import pandas as pd; print(pd.read_csv('data/interim/dataset_limpio_refactored.csv').shape)"
+  
+  # Salir
+  exit
+
+═══════════════════════════════════════════════════════════════════
+
+📁 ARCHIVOS GENERADOS
+
+Después de ejecutar, verás estos archivos en tu máquina local:
+
+data/interim/dataset_limpio_refactored.csv  ← Dataset limpio
+mlruns/                                      ← Experimentos MLflow
+reports/                                     ← Reportes generados
+
+Estos archivos persisten incluso después de cerrar Docker.
+
+═══════════════════════════════════════════════════════════════════
+
+🐛 TROUBLESHOOTING
+
+Problema: "Cannot connect to Docker daemon"
+Solución: Abre Docker Desktop y espera que esté corriendo
+
+Problema: "Permission denied" (Linux)
+Solución: sudo usermod -aG docker $USER && newgrp docker
+
+Problema: "Port 5000 already in use"
+Solución: Cierra otros servicios en puerto 5000
+
+Problema: Scripts no ejecutan (Linux/Mac)
+Solución: chmod +x docker-run.sh
+
+Problema: Scripts no ejecutan (Windows)
+Solución: Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+
+═══════════════════════════════════════════════════════════════════
+
+✅ VERIFICACIÓN RÁPIDA
+
+Para verificar que todo funciona:
+
+$ ./docker-run.sh all
+
+Deberías ver:
+  ✅ Build complete
+  ✅ EDA pipeline complete
+  🎉 DATASETS ARE IDENTICAL
+  ✅ 12 passed
+
+═══════════════════════════════════════════════════════════════════
+
+📚 MÁS INFORMACIÓN
+
+- DOCKER_GUIDE.md → Guía completa de Docker
+- INDEX.md → Navegación del proyecto
+- README.md → Documentación técnica
+- QUICK_START.md → Guía sin Docker
+
+═══════════════════════════════════════════════════════════════════
+
+🎉 ¡LISTO!
+
+Con Docker, el proyecto funciona en:
+  ✅ Windows
+  ✅ Mac
+  ✅ Linux
+  ✅ Cualquier sistema con Docker
+
+Sin importar:
+  ❌ Tu versión de Python
+  ❌ Tus dependencias instaladas
+  ❌ Tu sistema operativo
+
+═══════════════════════════════════════════════════════════════════
+
+COMANDO MÁS SIMPLE PARA EJECUTAR TODO:
+
+Linux/Mac:    ./docker-run.sh all
+Windows:      .\docker-run.ps1 all
+
+¡Eso es todo! 🚀
