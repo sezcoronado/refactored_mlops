@@ -26,6 +26,7 @@ METRICS_DIR = REPORTS_DIR / "metrics"
 # MLflow tracking
 MLFLOW_TRACKING_URI = "file:" + str(PROJECT_ROOT / "mlruns")
 MLFLOW_EXPERIMENT_NAME = "obesity-eda-refactored"
+MLFLOW_ML_EXPERIMENT_NAME = "Clasificacion_Niveles_Obesidad"
 
 # Data file paths
 ORIGINAL_DATA_PATH = INTERIM_DATA_DIR / "obesity_estimation_original.csv"
@@ -102,3 +103,34 @@ LOWERCASE_BINARY_COLS: List[str] = [
 
 # Random seed for reproducibility
 RANDOM_STATE = 42
+
+# ML Hyperparameters
+ML_TEST_SIZE = 0.2
+ML_CV_SPLITS = 5
+ML_RANDOM_SEARCH_ITER = 20
+
+# RandomForest parameters
+RF_N_ESTIMATORS = 200
+RF_MAX_DEPTH = 10
+
+# XGBoost parameters
+XGB_N_ESTIMATORS = 200
+XGB_MAX_DEPTH = 5
+XGB_LEARNING_RATE = 0.1
+
+# KNN parameters
+KNN_N_NEIGHBORS = 5
+
+# SVM parameters
+SVM_KERNEL = 'linear'
+SVM_C = 1.0
+
+# XGBoost hyperparameter search space
+XGB_PARAM_DIST = {
+    'clf__n_estimators': [100, 200, 400],
+    'clf__max_depth': [3, 5, 7],
+    'clf__learning_rate': [0.01, 0.05, 0.1],
+    'clf__subsample': [0.6, 0.8, 1.0],
+    'clf__colsample_bytree': [0.6, 0.8, 1.0],
+    'smote__k_neighbors': [1]
+}

@@ -34,10 +34,11 @@ COMMANDS:
 
   PIPELINE COMMANDS:
     eda           Run the EDA pipeline (data cleaning)
+    ml            Run the ML pipeline (model training)
     visualize     Generate EDA visualizations (PNG images)
     compare       Compare datasets (validate results)
     test          Run unit tests
-    all           Run EDA + Compare + Test (complete workflow)
+    all           Run EDA + ML + Visualize + Compare + Test (complete workflow)
 
   SERVER COMMANDS:
     mlflow        Start MLflow UI (http://localhost:5000)
@@ -49,7 +50,7 @@ COMMANDS:
     logs          Show logs from running containers
     stop          Stop all running containers
 
-  ℹHELP:
+  HELP:
     help          Show this help message
 
 EXAMPLES:
@@ -59,6 +60,9 @@ EXAMPLES:
 
   # Run only EDA pipeline
   ./docker-run.sh eda
+
+  # Run ML training
+  ./docker-run.sh ml
 
   # Generate visualizations
   ./docker-run.sh visualize
@@ -85,68 +89,79 @@ EOF
 
 # Function to build images
 build_images() {
-    print_message "$BLUE" "Building Docker images..."
+    print_message "$BLUE" "🔨 Building Docker images..."
     docker-compose build
-    print_message "$GREEN" "Build complete!"
+    print_message "$GREEN" "✅ Build complete!"
 }
 
 # Function to run EDA pipeline
 run_eda() {
-    print_message "$BLUE" "Running EDA pipeline..."
+    print_message "$BLUE" "📊 Running EDA pipeline..."
     docker-compose run --rm eda-pipeline
-    print_message "$GREEN" "EDA pipeline complete!"
+    print_message "$GREEN" "✅ EDA pipeline complete!"
+}
+
+# Function to run ML pipeline
+run_ml() {
+    print_message "$BLUE" "🤖 Running ML pipeline..."
+    docker-compose run --rm ml-pipeline
+    print_message "$GREEN" "✅ ML pipeline complete!"
 }
 
 # Function to generate visualizations
 run_visualize() {
-    print_message "$BLUE" "Generating EDA visualizations..."
+    print_message "$BLUE" "📈 Generating EDA visualizations..."
     docker-compose run --rm visualize
-    print_message "$GREEN" "Visualizations generated in reports/figures/"
+    print_message "$GREEN" "✅ Visualizations generated in reports/figures/"
 }
 
 # Function to compare datasets
 run_compare() {
-    print_message "$BLUE" "Comparing datasets..."
+    print_message "$BLUE" "🔍 Comparing datasets..."
     docker-compose run --rm compare
 }
 
 # Function to run tests
 run_tests() {
-    print_message "$BLUE" "Running tests..."
+    print_message "$BLUE" "🧪 Running tests..."
     docker-compose run --rm test
 }
 
 # Function to run complete workflow
 run_all() {
-    print_message "$YELLOW" "Running complete workflow..."
+    print_message "$YELLOW" "🚀 Running complete workflow..."
     echo ""
     
-    print_message "$BLUE" "Step 1/4: Running EDA pipeline..."
+    print_message "$BLUE" "Step 1/5: Running EDA pipeline..."
     run_eda
     echo ""
     
-    print_message "$BLUE" "Step 2/4: Generating visualizations..."
+    print_message "$BLUE" "Step 2/5: Running ML pipeline..."
+    run_ml
+    echo ""
+    
+    print_message "$BLUE" "Step 3/5: Generating visualizations..."
     run_visualize
     echo ""
     
-    print_message "$BLUE" "Step 3/4: Comparing datasets..."
+    print_message "$BLUE" "Step 4/5: Comparing datasets..."
     run_compare
     echo ""
     
-    print_message "$BLUE" "Step 4/4: Running tests..."
+    print_message "$BLUE" "Step 5/5: Running tests..."
     run_tests
     echo ""
     
     print_message "$GREEN" "╔════════════════════════════════════════════════════════════╗"
     print_message "$GREEN" "║                                                            ║"
-    print_message "$GREEN" "║              COMPLETE WORKFLOW FINISHED!                   ║"
+    print_message "$GREEN" "║         🎉 COMPLETE WORKFLOW FINISHED! 🎉                  ║"
     print_message "$GREEN" "║                                                            ║"
     print_message "$GREEN" "╚════════════════════════════════════════════════════════════╝"
 }
 
 # Function to start MLflow UI
 start_mlflow() {
-    print_message "$BLUE" "Starting MLflow UI..."
+    print_message "$BLUE" "🔬 Starting MLflow UI..."
     print_message "$YELLOW" "Access MLflow at: http://localhost:5000"
     print_message "$YELLOW" "Press Ctrl+C to stop"
     docker-compose up mlflow
@@ -154,35 +169,38 @@ start_mlflow() {
 
 # Function to open shell
 open_shell() {
-    print_message "$BLUE" "Opening interactive shell..."
+    print_message "$BLUE" "💻 Opening interactive shell..."
     print_message "$YELLOW" "Type 'exit' to leave the shell"
     docker-compose run --rm shell bash
 }
 
 # Function to show logs
 show_logs() {
-    print_message "$BLUE" "Showing logs..."
+    print_message "$BLUE" "📋 Showing logs..."
     docker-compose logs --tail=100 -f
 }
 
 # Function to stop containers
 stop_containers() {
-    print_message "$BLUE" "Stopping all containers..."
+    print_message "$BLUE" "🛑 Stopping all containers..."
     docker-compose down
-    print_message "$GREEN" "All containers stopped!"
+    print_message "$GREEN" "✅ All containers stopped!"
 }
 
 # Function to clean everything
 clean_all() {
-    print_message "$YELLOW" "Cleaning all containers and images..."
+    print_message "$YELLOW" "🧹 Cleaning all containers and images..."
     docker-compose down --rmi all --volumes --remove-orphans
-    print_message "$GREEN" "Cleanup complete!"
+    print_message "$GREEN" "✅ Cleanup complete!"
 }
 
 # Main script logic
 case "${1:-help}" in
     eda)
         run_eda
+        ;;
+    ml)
+        run_ml
         ;;
     visualize)
         run_visualize

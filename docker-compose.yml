@@ -18,6 +18,25 @@ services:
     networks:
       - ml-network
 
+  # ML Pipeline service - Train models
+  ml-pipeline:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: obesity-ml-train
+    volumes:
+      - ./data:/app/data
+      - ./models:/app/models
+      - ./reports:/app/reports
+      - ./mlruns:/app/mlruns
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: python scripts/run_ml.py
+    networks:
+      - ml-network
+    depends_on:
+      - eda-pipeline
+
   # Comparison service - Validate results
   compare:
     build:
@@ -34,7 +53,7 @@ services:
     depends_on:
       - eda-pipeline
 
-    # Visualization service - Generate EDA plots
+  # Visualization service - Generate EDA plots
   visualize:
     build:
       context: .
@@ -59,6 +78,7 @@ services:
     container_name: obesity-ml-test
     volumes:
       - ./data:/app/data
+      - ./models:/app/models
     environment:
       - PYTHONUNBUFFERED=1
     command: pytest tests/ -v --tb=short

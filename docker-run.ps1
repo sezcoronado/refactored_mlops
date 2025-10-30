@@ -21,10 +21,11 @@ COMMANDS:
 
   PIPELINE COMMANDS:
     eda           Run the EDA pipeline (data cleaning)
+    ml            Run the ML pipeline (model training)
     visualize     Generate EDA visualizations (PNG images)
     compare       Compare datasets (validate results)
     test          Run unit tests
-    all           Run EDA + Visualize + Compare + Test (complete workflow)
+    all           Run EDA + ML + Visualize + Compare + Test (complete workflow)
 
   SERVER COMMANDS:
     mlflow        Start MLflow UI (http://localhost:5000)
@@ -47,6 +48,9 @@ EXAMPLES:
   # Run only EDA pipeline
   .\docker-run.ps1 eda
 
+  # Run ML training
+  .\docker-run.ps1 ml
+
   # Generate visualizations
   .\docker-run.ps1 visualize
 
@@ -68,6 +72,13 @@ switch ($Command.ToLower()) {
             Write-Host "EDA pipeline complete!" -ForegroundColor Green
         }
     }
+    "ml" {
+        Write-Host "Running ML pipeline..." -ForegroundColor Blue
+        docker-compose run --rm ml-pipeline
+        if ($LASTEXITCODE -eq 0) {
+            Write-Host "ML pipeline complete!" -ForegroundColor Green
+        }
+    }
     "visualize" {
         Write-Host "Generating EDA visualizations..." -ForegroundColor Blue
         docker-compose run --rm visualize
@@ -87,25 +98,32 @@ switch ($Command.ToLower()) {
         Write-Host "Running complete workflow..." -ForegroundColor Yellow
         Write-Host ""
         
-        Write-Host "Step 1/4: Running EDA pipeline..." -ForegroundColor Blue
+        Write-Host "Step 1/5: Running EDA pipeline..." -ForegroundColor Blue
         docker-compose run --rm eda-pipeline
         if ($LASTEXITCODE -eq 0) {
             Write-Host "EDA pipeline complete!" -ForegroundColor Green
         }
         Write-Host ""
         
-        Write-Host "Step 2/4: Generating visualizations..." -ForegroundColor Blue
+        Write-Host "Step 2/5: Running ML pipeline..." -ForegroundColor Blue
+        docker-compose run --rm ml-pipeline
+        if ($LASTEXITCODE -eq 0) {
+            Write-Host "ML pipeline complete!" -ForegroundColor Green
+        }
+        Write-Host ""
+        
+        Write-Host "Step 3/5: Generating visualizations..." -ForegroundColor Blue
         docker-compose run --rm visualize
         if ($LASTEXITCODE -eq 0) {
             Write-Host "Visualizations generated!" -ForegroundColor Green
         }
         Write-Host ""
         
-        Write-Host "Step 3/4: Comparing datasets..." -ForegroundColor Blue
+        Write-Host "Step 4/5: Comparing datasets..." -ForegroundColor Blue
         docker-compose run --rm compare
         Write-Host ""
         
-        Write-Host "Step 4/4: Running tests..." -ForegroundColor Blue
+        Write-Host "Step 5/5: Running tests..." -ForegroundColor Blue
         docker-compose run --rm test
         Write-Host ""
         
