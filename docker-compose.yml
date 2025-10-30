@@ -34,6 +34,23 @@ services:
     depends_on:
       - eda-pipeline
 
+    # Visualization service - Generate EDA plots
+  visualize:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: obesity-ml-visualize
+    volumes:
+      - ./data:/app/data
+      - ./reports:/app/reports
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: python scripts/generate_visualizations.py
+    networks:
+      - ml-network
+    depends_on:
+      - eda-pipeline
+      
   # Test service - Run unit tests
   test:
     build:
